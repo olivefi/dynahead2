@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Publish robot state (base) as TF -->
+  <node name="dynahead2_vr" pkg="dynahead2_vr" type="dynahead2_vr_node" output="screen" respawn="false">
+    <rosparam command="load" file="$(find dynahead2_vr)/config/dynahead2_vr_params.yaml" />
+  </node>
+
+</launch>

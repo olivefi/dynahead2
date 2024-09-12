@@ -59,9 +59,23 @@ protected:
 
   // Callbacks
   void jointCmdCallback(const sensor_msgs::JointState::ConstPtr &msg);
-  
+
   // Publishers + Subscribers
   ros::Publisher jointStatePub_;
   ros::Subscriber jointCmdSub_;
+
+  // Helper methods
+  double toPlusMinusPi(double angle) {
+    if (angle > M_PI) {
+      while (angle > M_PI) {
+        angle -= 2*M_PI;
+      }
+    } else if (angle < -M_PI) {
+      while (angle < -M_PI) {
+        angle += 2*M_PI;
+      }
+    }
+    return angle;
+  }
 };
 } /* namespace dynahead2_control */

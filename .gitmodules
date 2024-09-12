@@ -1,0 +1,3 @@
+[submodule "dependencies/ROS-TCP-Endpoint"]
+	path = dependencies/ROS-TCP-Endpoint
+	url = git@github.com:leggedrobotics/ROS-TCP-Endpoint.git

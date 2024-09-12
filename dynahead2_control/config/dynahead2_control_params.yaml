@@ -1,4 +1,4 @@
-update_rate: 1 # Hz
+update_rate: 15 # Hz
 encoder_ticks: 4096
 device_name: "/dev/ttyUSB0"
 
@@ -7,3 +7,6 @@ yaw_id: 2
 
 pitch_offset: 3.14
 yaw_offset: 3.14
+
+pitch_direction: 1
+yaw_direction: -1

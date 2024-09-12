@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>dynahead2_vr</name>
+  <version>1.0.0</version>
+  <description>Node that uses dynahead2 to track VR headset</description>
+  <maintainer email="olivefi@ethz.ch">Oliver Fischer</maintainer>
+  <license>Proprietary</license>
+  <author email="olivefi@ethz.ch">Oliver Fischer</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>any_node</depend>
+  <depend>sensor_msgs</depend>
+  <depend>dynahead2_control</depend>
+
+  <exec_depend>ros_tcp_endpoint</exec_depend>
+  <test_depend>cmake_code_coverage</test_depend>
+  <test_depend>gtest</test_depend>
+
+</package>

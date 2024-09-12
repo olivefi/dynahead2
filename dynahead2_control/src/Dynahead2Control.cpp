@@ -14,6 +14,8 @@ bool Dynahead2Control::init() {
   dynamixels_["yaw"] = param<int>("yaw_id", YAW_DXL_ID);
   jointOffsets_["pitch"] = param<double>("pitch_offset", 1.57);
   jointOffsets_["yaw"] = param<double>("yaw_offset", 1.57);
+  jointDirections_["pitch"] = param<int>("pitch_direction", 1);
+  jointDirections_["yaw"] = param<int>("yaw_direction", -1);
 
   jointStateCmd_ = sensor_msgs::JointState();
   jointStateCmd_.name = {"pitch", "yaw"};
@@ -94,7 +96,7 @@ bool Dynahead2Control::getPositions(sensor_msgs::JointState &jointState) {
       return false;
     }
     jointState.name.push_back(dynamixel_name);
-    jointState.position.push_back((position/(encoderTicks_/(2*M_PI))) - jointOffsets_[dynamixel_name]);
+    jointState.position.push_back(toPlusMinusPi(jointDirections_[dynamixel_name] * (position/(encoderTicks_/(2*M_PI))) - jointOffsets_[dynamixel_name]));
   }
   return true;
 }
@@ -103,7 +105,7 @@ bool Dynahead2Control::setPositions(const sensor_msgs::JointState &jointStateCmd
   for (int i = 0; i < jointStateCmd.name.size(); i++) {
     const auto dynamixel_name = jointStateCmd.name[i];
     const auto dynamixel_id = dynamixels_[dynamixel_name];
-    const int goal_position = (jointStateCmd.position[i] + jointOffsets_[dynamixel_name]) * (encoderTicks_/(2*M_PI));
+    const int goal_position = (jointDirections_[dynamixel_name] * jointStateCmd.position[i] + jointOffsets_[dynamixel_name]) * (encoderTicks_/(2*M_PI));
     if (!setPosition(dynamixel_id, goal_position)) {
       return false;
     }
