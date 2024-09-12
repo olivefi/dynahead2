@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find dynahead2_control)/launch/dynahead2_control.launch" />
+    <include file="$(find dynahead2_vr)/launch/dynahead2_vr.launch" />
+    <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch" />
+</launch>

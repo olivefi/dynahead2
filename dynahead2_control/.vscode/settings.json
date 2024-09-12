@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "thread": "cpp",
-        "condition_variable": "cpp",
-        "unordered_map": "cpp",
-        "unordered_set": "cpp",
-        "random": "cpp"
-    }
-}

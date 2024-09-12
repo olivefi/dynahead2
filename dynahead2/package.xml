@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<package format="2">
+
+  <name>dynahead2</name>
+  <version>0.1.0</version>
+  <description>The dynahead2 package</description>
+
+  <license>Proprietary</license>
+
+  <maintainer email="olivefi@ethz.ch">Oliver Fischer</maintainer>
+  <author email="olivefi@ethz.ch">Oliver Fischer</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>dynahead2_control</exec_depend>
+  <exec_depend>dynahead2_vr</exec_depend>
+
+</package>
