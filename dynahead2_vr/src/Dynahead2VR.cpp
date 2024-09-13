@@ -9,7 +9,7 @@ bool Dynahead2VR::init() {
   updateRate_ = param<double>("update_rate", 100);
 
   dynahead2JointStateSub_ = nh_->subscribe("/dynahead2_control/joint_states", 1, &Dynahead2VR::dynahead2JointStateCallback, this);
-  vrStateSub_ = nh_->subscribe("/quest/headset/pose", 1, &Dynahead2VR::vrStateCallback, this);
+  vrStateSub_ = nh_->subscribe("/quest/pose/headset", 1, &Dynahead2VR::vrStateCallback, this);
   dynahead2JointCmdPub_ = nh_->advertise<sensor_msgs::JointState>("/dynahead2_control/joint_commands", 1);
 
   updateRate_ = param<double>("update_rate", 20);
@@ -36,14 +36,13 @@ void Dynahead2VR::cleanup() {
 }
 
 bool Dynahead2VR::update(const any_worker::WorkerEvent &event) {
-  if (!dynahead2InitReceived_ || !vrInitReceived_) {
-    return true;
-  }
-
   PitchYaw vrRelativeAngles;
   vrRelativeAngles.pitch = vrAngles_.pitch - vrAnglesInit_.pitch;
   vrRelativeAngles.yaw = vrAngles_.yaw - vrAnglesInit_.yaw;
 
+  if (!dynahead2InitReceived_ || !vrInitReceived_) {
+    return true;
+  }
   sensor_msgs::JointState dynahead2JointCmd;
   dynahead2JointCmd.header.stamp = ros::Time::now();
   dynahead2JointCmd.name.push_back("pitch");
@@ -57,9 +56,9 @@ bool Dynahead2VR::update(const any_worker::WorkerEvent &event) {
 
 void Dynahead2VR::vrStateCallback(const geometry_msgs::PoseStamped::ConstPtr &msg) {
   Eigen::Quaterniond q(msg->pose.orientation.w, msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z);
-  Eigen::Vector3d euler = q.toRotationMatrix().eulerAngles(0, 1, 2);
-  vrAngles_.pitch = euler[1];
-  vrAngles_.yaw = euler[2];
+  Eigen::Matrix3d rotM = q.toRotationMatrix();
+  vrAngles_.pitch = atan2(-rotM(2,0), sqrt(pow(rotM(1,0),2)+pow(rotM(2,2),2)));
+  vrAngles_.yaw = atan2(rotM(1,0), rotM(0,0));
   if (!vrInitReceived_) {
     vrAnglesInit_ = vrAngles_;
     vrInitReceived_ = true;

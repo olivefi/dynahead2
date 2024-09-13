@@ -10,12 +10,14 @@ bool Dynahead2Control::init() {
   deviceName_ = param<std::string>("device_name", "/dev/ttyUSB0");
   encoderTicks_ = param<uint>("encoder_ticks", 4096);
   
-  dynamixels_["pitch"] = param<int>("pitch_id", PITCH_DXL_ID);
-  dynamixels_["yaw"] = param<int>("yaw_id", YAW_DXL_ID);
-  jointOffsets_["pitch"] = param<double>("pitch_offset", 1.57);
-  jointOffsets_["yaw"] = param<double>("yaw_offset", 1.57);
-  jointDirections_["pitch"] = param<int>("pitch_direction", 1);
-  jointDirections_["yaw"] = param<int>("yaw_direction", -1);
+  dynamixels_["pitch"] = param<int>("pitch/id", PITCH_DXL_ID);
+  dynamixels_["yaw"] = param<int>("yaw/id", YAW_DXL_ID);
+  jointOffsets_["pitch"] = param<double>("pitch/offset", 1.57);
+  jointOffsets_["yaw"] = param<double>("yaw/offset", 1.57);
+  jointDirections_["pitch"] = param<int>("pitch/direction", 1);
+  jointDirections_["yaw"] = param<int>("yaw/direction", -1);
+  jointLimits_["pitch"] = param<std::vector<double>>("pitch/limits", {-M_PI/4., M_PI/4.});
+  jointLimits_["yaw"] = param<std::vector<double>>("yaw/limits", {-M_PI/4., M_PI/4.});
 
   jointStateCmd_ = sensor_msgs::JointState();
   jointStateCmd_.name = {"pitch", "yaw"};
@@ -105,7 +107,13 @@ bool Dynahead2Control::setPositions(const sensor_msgs::JointState &jointStateCmd
   for (int i = 0; i < jointStateCmd.name.size(); i++) {
     const auto dynamixel_name = jointStateCmd.name[i];
     const auto dynamixel_id = dynamixels_[dynamixel_name];
-    const int goal_position = (jointDirections_[dynamixel_name] * jointStateCmd.position[i] + jointOffsets_[dynamixel_name]) * (encoderTicks_/(2*M_PI));
+    double target = jointStateCmd.position[i];
+    if (target < jointLimits_[dynamixel_name][0] || target > jointLimits_[dynamixel_name][1]) {
+      ROS_WARN_STREAM_THROTTLE(0.5, "Goal position for Dynamixel ID " << dynamixel_id << " is out of bounds. Value: " << target
+        << ". Clamping to [" << jointLimits_[dynamixel_name][0] << ", " << jointLimits_[dynamixel_name][1] << "]");
+      target = std::clamp(target, jointLimits_[dynamixel_name][0], jointLimits_[dynamixel_name][1]);
+    }
+    const int goal_position = (jointDirections_[dynamixel_name] * target + jointOffsets_[dynamixel_name]) * (encoderTicks_/(2*M_PI));
     if (!setPosition(dynamixel_id, goal_position)) {
       return false;
     }

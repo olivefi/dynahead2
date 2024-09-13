@@ -47,6 +47,7 @@ protected:
   uint encoderTicks_;
   std::map<std::string, double> jointOffsets_;
   std::map<std::string, int> jointDirections_;
+  std::map<std::string, std::vector<double>> jointLimits_;
 
   // Internal state variables
   sensor_msgs::JointState jointState_;
