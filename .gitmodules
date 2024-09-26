@@ -1,3 +1,15 @@
 [submodule "dependencies/ROS-TCP-Endpoint"]
 	path = dependencies/ROS-TCP-Endpoint
 	url = git@github.com:leggedrobotics/ROS-TCP-Endpoint.git
+[submodule "dependencies/any_node"]
+	path = dependencies/any_node
+	url = git@github.com:ANYbotics/any_node.git
+[submodule "dependencies/message_logger"]
+	path = dependencies/message_logger
+	url = git@github.com:ANYbotics/message_logger.git
+[submodule "dependencies/DynamixelSDK"]
+	path = dependencies/DynamixelSDK
+	url = git@github.com:ROBOTIS-GIT/DynamixelSDK.git
+[submodule "dependencies/zed-ros-wrapper"]
+	path = dependencies/zed-ros-wrapper
+	url = git@github.com:stereolabs/zed-ros-wrapper.git

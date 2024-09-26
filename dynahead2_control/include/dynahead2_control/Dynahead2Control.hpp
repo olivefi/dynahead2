@@ -21,7 +21,7 @@ const float PROTOCOL_VERSION = 2.0;
 // Default setting
 const int PITCH_DXL_ID = 1;
 const int YAW_DXL_ID = 2;
-const int BAUDRATE =  57600;
+const int BAUDRATE =  115200;
 
 class Dynahead2Control : public any_node::Node {
 public:
