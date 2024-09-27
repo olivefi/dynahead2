@@ -57,8 +57,8 @@ bool Dynahead2VR::update(const any_worker::WorkerEvent &event) {
 void Dynahead2VR::vrStateCallback(const geometry_msgs::PoseStamped::ConstPtr &msg) {
   Eigen::Quaterniond q(msg->pose.orientation.w, msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z);
   Eigen::Matrix3d rotM = q.toRotationMatrix();
-  vrAngles_.pitch = atan2(-rotM(2,0), sqrt(pow(rotM(1,0),2)+pow(rotM(2,2),2)));
-  vrAngles_.yaw = atan2(rotM(1,0), rotM(0,0));
+  vrAngles_.pitch = toPlusMinusPi(atan2(-rotM(2,0), sqrt(pow(rotM(1,0),2)+pow(rotM(2,2),2))));
+  vrAngles_.yaw = toPlusMinusPi(atan2(rotM(1,0), rotM(0,0)));
   if (!vrInitReceived_) {
     vrAnglesInit_ = vrAngles_;
     vrInitReceived_ = true;
