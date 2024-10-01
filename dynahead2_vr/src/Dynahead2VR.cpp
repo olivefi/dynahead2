@@ -37,8 +37,8 @@ void Dynahead2VR::cleanup() {
 
 bool Dynahead2VR::update(const any_worker::WorkerEvent &event) {
   PitchYaw vrRelativeAngles;
-  vrRelativeAngles.pitch = vrAngles_.pitch - vrAnglesInit_.pitch;
-  vrRelativeAngles.yaw = vrAngles_.yaw - vrAnglesInit_.yaw;
+  vrRelativeAngles.pitch = toPlusMinusPi(vrAngles_.pitch - vrAnglesInit_.pitch);
+  vrRelativeAngles.yaw = toPlusMinusPi(vrAngles_.yaw - vrAnglesInit_.yaw);
 
   if (!dynahead2InitReceived_ || !vrInitReceived_) {
     return true;
