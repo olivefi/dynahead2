@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Publish robot state (base) as TF -->
+  <node name="vr_teleop" pkg="vr_teleop" type="vr_teleop_node" output="screen" respawn="false">
+    <rosparam command="load" file="$(find vr_teleop)/config/vr_teleop.yaml" />
+  </node>
+
+</launch>

@@ -1,0 +1,5 @@
+update_rate: 100 # Hz
+timeout: 0.1 # s
+x_scaling: 1.0
+y_scaling: 0.3
+z_scaling: 0.5
