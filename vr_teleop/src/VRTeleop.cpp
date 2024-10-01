@@ -14,7 +14,8 @@ bool VRTeleop::init() {
 
   twistPub_ = nh_->advertise<geometry_msgs::TwistStamped>("/teleop/base/twist", 1);
   vrJoySub_ = nh_->subscribe("/quest/joystick", 1, &VRTeleop::vrJoyCallback, this);
-  followerTimeSub_ = nh_->subscribe("/teleop/time", 1, &VRTeleop::followerTimeCallback, this);
+  // imu sub is used for time sync
+  imuSub_ = nh_->subscribe("/sensors/imu", 1, &VRTeleop::imuCallback, this);
 
   any_worker::WorkerOptions workerOptions;
   workerOptions.name_ = ros::this_node::getName() + std::string{"_broadcast"};
@@ -33,7 +34,7 @@ bool VRTeleop::init() {
 void VRTeleop::cleanup() {
   twistPub_.shutdown();
   vrJoySub_.shutdown();
-  followerTimeSub_.shutdown();
+  imuSub_.shutdown();
 }
 
 bool VRTeleop::update(const any_worker::WorkerEvent &event) {
@@ -63,8 +64,8 @@ void VRTeleop::vrJoyCallback(const sensor_msgs::Joy::ConstPtr &msg) {
   lastJoyReceived_ = ros::Time::now();
 }
 
-void VRTeleop::followerTimeCallback(const std_msgs::Time::ConstPtr &msg) {
-  followerDeviceTime_ = msg->data;
+void VRTeleop::imuCallback(const sensor_msgs::Imu::ConstPtr &msg) {
+  followerDeviceTime_ = msg->header.stamp;
 }
 
 } /* namespace vr_teleop */

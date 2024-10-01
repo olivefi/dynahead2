@@ -6,6 +6,7 @@
 
 #include <any_node/any_node.hpp>
 #include <sensor_msgs/Joy.h>
+#include <sensor_msgs/Imu.h>
 #include <geometry_msgs/TwistStamped.h>
 #include <std_msgs/Time.h>
 
@@ -43,11 +44,11 @@ protected:
 
   // Callbacks
   void vrJoyCallback(const sensor_msgs::Joy::ConstPtr &msg);
-  void followerTimeCallback(const std_msgs::Time::ConstPtr &msg);
+  void imuCallback(const sensor_msgs::Imu::ConstPtr &msg);
 
   // Publishers + Subscribers
   ros::Publisher twistPub_;
   ros::Subscriber vrJoySub_;
-  ros::Subscriber followerTimeSub_;
+  ros::Subscriber imuSub_;
 };
 } /* namespace vr_teleop */
