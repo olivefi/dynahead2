@@ -11,6 +11,7 @@ bool Dynahead2VR::init() {
   dynahead2JointStateSub_ = nh_->subscribe("/dynahead2_control/joint_states", 1, &Dynahead2VR::dynahead2JointStateCallback, this);
   vrStateSub_ = nh_->subscribe("/quest/pose/headset", 1, &Dynahead2VR::vrStateCallback, this);
   dynahead2JointCmdPub_ = nh_->advertise<sensor_msgs::JointState>("/dynahead2_control/joint_commands", 1);
+  headResetSub_ = nh_->subscribe("/teleop/reset_head", 1, &Dynahead2VR::headResetCallback, this);
 
   updateRate_ = param<double>("update_rate", 20);
   vrScaling_ = param<double>("vr_scaling", 1.0);
@@ -76,6 +77,10 @@ void Dynahead2VR::dynahead2JointStateCallback(const sensor_msgs::JointState::Con
     dynahead2AnglesInit_ = dynahead2Angles_;
     dynahead2InitReceived_ = true;
   }
+}
+
+void Dynahead2VR::headResetCallback(const std_msgs::Bool::ConstPtr &msg){
+  vrInitReceived_ = false;
 }
 
 } /* namespace dynahead2_vr */

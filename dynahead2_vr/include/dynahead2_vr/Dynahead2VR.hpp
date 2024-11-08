@@ -7,6 +7,7 @@
 #include <any_node/any_node.hpp>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <std_msgs/Bool.h>
 
 namespace dynahead2_vr {
 
@@ -43,11 +44,13 @@ protected:
   // Callbacks
   void dynahead2JointStateCallback(const sensor_msgs::JointState::ConstPtr &msg);
   void vrStateCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
+  void headResetCallback(const std_msgs::Bool::ConstPtr &msg);
 
   // Publishers + Subscribers
   ros::Publisher dynahead2JointCmdPub_;
   ros::Subscriber dynahead2JointStateSub_;
   ros::Subscriber vrStateSub_;
+  ros::Subscriber headResetSub_;
 
   // Helper methods
   double toPlusMinusPi(double angle) {
